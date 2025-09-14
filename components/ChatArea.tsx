@@ -194,6 +194,11 @@ const MessageContent = ({
 type Model = {
   id: string;
   name: string;
+  description: string;
+  speed: 'fastest' | 'balanced' | 'thorough';
+  capability: 'standard' | 'advanced' | 'most-capable';
+  contextWindow: string;
+  badge: string;
 };
 
 interface Message {
@@ -244,17 +249,35 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
             size="sm"
             className="flex-grow text-muted-foreground sm:flex-grow-0"
           >
-            {models.find((m) => m.id === selectedModel)?.name}
+            <span className="flex items-center gap-2">
+              {models.find((m) => m.id === selectedModel)?.badge}
+              {models.find((m) => m.id === selectedModel)?.name}
+            </span>
             <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="w-72">
           {models.map((model) => (
             <DropdownMenuItem
               key={model.id}
               onSelect={() => setSelectedModel(model.id)}
+              className="p-3"
             >
-              {model.name}
+              <div className="flex flex-col gap-1 w-full">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">{model.badge}</span>
+                  <span className="font-medium">{model.name}</span>
+                  <div className="ml-auto flex gap-1">
+                    <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
+                      {model.speed === 'fastest' ? '⚡ Fast' : model.speed === 'balanced' ? '⚖️ Balanced' : '🔍 Thorough'}
+                    </span>
+                    <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
+                      {model.contextWindow}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">{model.description}</p>
+              </div>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
@@ -268,14 +291,30 @@ function ChatArea() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
-  const [selectedModel, setSelectedModel] = useState("claude-3-5-sonnet-20240620");
+  const [selectedModel, setSelectedModel] = useState("claude-sonnet-4-20250514");
   const [showAvatar, setShowAvatar] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const models: Model[] = [
-    { id: "claude-3-haiku-20240307", name: "Claude 3 Haiku" },
-    { id: "claude-3-5-sonnet-20240620", name: "Claude 3.5 Sonnet" },
+    {
+      id: "claude-sonnet-4-20250514",
+      name: "Claude 4 Sonnet",
+      description: "Most capable model for complex reasoning and analysis",
+      speed: 'balanced',
+      capability: 'most-capable',
+      contextWindow: '200K',
+      badge: '🧠'
+    },
+    {
+      id: "claude-3-5-haiku-20241022",
+      name: "Claude 3.5 Haiku",
+      description: "Fast and efficient for quick responses",
+      speed: 'fastest',
+      capability: 'standard',
+      contextWindow: '200K',
+      badge: '⚡'
+    }
   ];
 
   const scrollToBottom = () => {
