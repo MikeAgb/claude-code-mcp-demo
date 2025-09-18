@@ -333,11 +333,18 @@ const models: Model[] = [
     capability: "standard"
   },
   {
-    id: "claude-3-5-sonnet-20241022",
-    name: "Claude 3.5 Sonnet",
+    id: "claude-sonnet-4-20250514",
+    name: "Claude 4 Sonnet",
     description: "Balanced performance, best for most tasks",
     speed: "moderate",
     capability: "advanced"
+  },
+  {
+    id: "claude-opus-4-1-20250805",
+    name: "Claude Opus 4.1",
+    description: "Most powerful, ideal for complex reasoning",
+    speed: "slow",
+    capability: "premium"
   },
 ];
 
@@ -355,8 +362,8 @@ function ChatArea() {
         return savedModel;
       }
     }
-    // Default to Claude 3.5 Sonnet
-    return "claude-3-5-sonnet-20241022";
+    // Default to Claude 4 Sonnet
+    return "claude-sonnet-4-20250514";
   });
   const [showAvatar, setShowAvatar] = useState(false);
 
