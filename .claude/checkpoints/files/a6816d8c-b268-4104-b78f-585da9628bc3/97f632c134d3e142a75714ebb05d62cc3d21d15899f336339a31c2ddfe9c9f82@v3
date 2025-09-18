@@ -12,7 +12,6 @@ import {
   WandSparkles,
   LifeBuoyIcon,
   BookOpenText,
-  BookOpen,
   ChevronDown,
   Send,
   Zap,
@@ -20,12 +19,6 @@ import {
   Crown,
   Star,
   Info,
-  Headphones,
-  PlayCircle,
-  Volume2,
-  BookMarked,
-  Clock,
-  Sparkles,
 } from "lucide-react";
 import "highlight.js/styles/atom-one-dark.css";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -215,11 +208,11 @@ type Model = {
 const getSpeedIcon = (speed?: Model["speed"]) => {
   switch (speed) {
     case "fast":
-      return <Zap className="w-3 h-3 text-orange-500" />;
+      return <Zap className="w-3 h-3 text-green-500" />;
     case "moderate":
-      return <Gauge className="w-3 h-3 text-amber-500" />;
+      return <Gauge className="w-3 h-3 text-yellow-500" />;
     case "slow":
-      return <Gauge className="w-3 h-3 text-orange-600" />;
+      return <Gauge className="w-3 h-3 text-red-500" />;
     default:
       return null;
   }
@@ -229,11 +222,11 @@ const getSpeedIcon = (speed?: Model["speed"]) => {
 const getCapabilityIcon = (capability?: Model["capability"]) => {
   switch (capability) {
     case "premium":
-      return <Crown className="w-3 h-3 text-orange-600" />;
+      return <Crown className="w-3 h-3 text-purple-500" />;
     case "advanced":
-      return <Star className="w-3 h-3 text-amber-500" />;
+      return <Star className="w-3 h-3 text-blue-500" />;
     case "standard":
-      return <BookMarked className="w-3 h-3 text-orange-400" />;
+      return <Info className="w-3 h-3 text-gray-500" />;
     default:
       return null;
   }
@@ -260,19 +253,21 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
   models,
   showAvatar,
 }) => (
-  <div className="p-0 flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 animate-fade-in border-b border-orange-200 dark:border-orange-900">
+  <div className="p-0 flex flex-col sm:flex-row items-start sm:items-center justify-between pb-2 animate-fade-in">
     <div className="flex items-center space-x-4 mb-2 sm:mb-0">
       {showAvatar && (
         <>
-          <div className="relative">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl shadow-lg flex items-center justify-center">
-              <Headphones className="w-6 h-6 text-white" />
-            </div>
-            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-pulse" />
-          </div>
+          <Avatar className="w-10 h-10 border">
+            <AvatarImage
+              src="/ant-logo.svg"
+              alt="AI Assistant Avatar"
+              width={40}
+              height={40}
+            />
+            <AvatarFallback>AI</AvatarFallback>
+          </Avatar>
           <div>
-            <h3 className="text-sm font-bold text-orange-600 dark:text-orange-400">AI Narrator</h3>
-            <p className="text-xs text-muted-foreground">Ready to narrate</p>
+            <h3 className="text-sm font-medium leading-none">AI Agent</h3>
           </div>
         </>
       )}
@@ -283,11 +278,10 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
           <Button
             variant="outline"
             size="sm"
-            className="flex-grow sm:flex-grow-0 min-w-[220px] bg-gradient-to-r from-orange-100 to-amber-100 dark:from-orange-950 dark:to-amber-950 border-orange-300 dark:border-orange-800 hover:from-orange-200 hover:to-amber-200 dark:hover:from-orange-900 dark:hover:to-amber-900"
-            title="Select your AI narrator voice"
+            className="flex-grow text-muted-foreground sm:flex-grow-0 min-w-[200px]"
+            title="Click to select a different model"
           >
-            <BookOpen className="h-4 w-4 text-orange-600 dark:text-orange-400 mr-2" />
-            <span className="flex items-center gap-2 font-semibold text-orange-800 dark:text-orange-200">
+            <span className="flex items-center gap-2">
               {models.find((m) => m.id === selectedModel)?.name}
               {(() => {
                 const model = models.find((m) => m.id === selectedModel);
@@ -299,7 +293,7 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
                 );
               })()}
             </span>
-            <ChevronDown className="ml-auto h-4 w-4 text-orange-600 dark:text-orange-400" />
+            <ChevronDown className="ml-auto h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-80">
@@ -339,18 +333,11 @@ const models: Model[] = [
     capability: "standard"
   },
   {
-    id: "claude-sonnet-4-20250514",
-    name: "Claude 4 Sonnet",
+    id: "claude-3-5-sonnet-20241022",
+    name: "Claude 3.5 Sonnet",
     description: "Balanced performance, best for most tasks",
     speed: "moderate",
     capability: "advanced"
-  },
-  {
-    id: "claude-opus-4-1-20250805",
-    name: "Claude Opus 4.1",
-    description: "Most powerful, ideal for complex reasoning",
-    speed: "slow",
-    capability: "premium"
   },
 ];
 
@@ -368,8 +355,8 @@ function ChatArea() {
         return savedModel;
       }
     }
-    // Default to Claude 4 Sonnet
-    return "claude-sonnet-4-20250514";
+    // Default to Claude 3.5 Sonnet
+    return "claude-3-5-sonnet-20241022";
   });
   const [showAvatar, setShowAvatar] = useState(false);
 
@@ -634,7 +621,7 @@ function ChatArea() {
   }, []);
 
   return (
-    <Card className="flex-1 flex flex-col mb-4 mr-4 ml-4 audiobook-card shadow-2xl">
+    <Card className="flex-1 flex flex-col mb-4 mr-4 ml-4">
       <CardContent className="flex-1 flex flex-col overflow-hidden pt-4 px-4 pb-0">
         <ConversationHeader
           selectedModel={selectedModel}
@@ -642,48 +629,37 @@ function ChatArea() {
           models={models}
           showAvatar={showAvatar}
         />
-        {/* Audio waveform animation */}
-        {isLoading && (
-          <div className="flex justify-center py-2">
-            <div className="audio-wave">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
-        )}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full animate-fade-in-up">
-              <div className="relative mb-8">
-                <div className="w-24 h-24 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl shadow-2xl flex items-center justify-center transform rotate-3 hover:rotate-6 transition-transform">
-                  <Headphones className="w-12 h-12 text-white" />
-                </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <PlayCircle className="w-5 h-5 text-white" />
-                </div>
-              </div>
-              <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
-                Your Audiobook AI Narrator
+              <Avatar className="w-10 h-10 mb-4 border">
+                <AvatarImage
+                  src="/ant-logo.svg"
+                  alt="AI Assistant Avatar"
+                  width={40}
+                  height={40}
+                />
+              </Avatar>
+              <h2 className="text-2xl font-semibold mb-8">
+                Here&apos;s how I can help
               </h2>
-              <p className="text-muted-foreground mb-8">Start your listening journey</p>
-              <div className="space-y-4 text-sm max-w-md">
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-orange-50 dark:bg-orange-950/20">
-                  <BookMarked className="text-orange-500" />
-                  <p className="text-foreground">
-                    Discover audiobook recommendations tailored to your interests
+              <div className="space-y-4 text-sm">
+                <div className="flex items-center gap-3">
+                  <HandHelping className="text-muted-foreground" />
+                  <p className="text-muted-foreground">
+                    Need guidance? I&apos;ll help navigate tasks using internal
+                    resources.
                   </p>
                 </div>
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/20">
-                  <Sparkles className="text-amber-500" />
-                  <p className="text-foreground">
-                    Get instant summaries and insights from any book
+                <div className="flex items-center gap-3">
+                  <WandSparkles className="text-muted-foreground" />
+                  <p className="text-muted-foreground">
+                    I&apos;m a whiz at finding information! I can dig through
+                    your knowledge base.
                   </p>
                 </div>
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-orange-50 dark:bg-orange-950/20">
-                  <Volume2 className="text-orange-500" />
+                <div className="flex items-center gap-3">
+                  <BookOpenText className="text-muted-foreground" />
                   <p className="text-muted-foreground">
                     I&apos;m always learning! The more you share, the better I
                     can assist you.
@@ -692,33 +668,34 @@ function ChatArea() {
               </div>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-4">
               {messages.map((message, index) => (
-                <div key={message.id} className="message-appear">
-                  {/* Chapter marker for new sections */}
-                  {index % 4 === 0 && index !== 0 && (
-                    <div className="chapter-marker mb-4">
-                      <Clock className="w-4 h-4" />
-                      <span>Chapter {Math.floor(index / 4) + 1}</span>
-                    </div>
-                  )}
+                <div key={message.id}>
                   <div
                     className={`flex items-start ${
                       message.role === "user" ? "justify-end" : ""
+                    } ${
+                      index === messages.length - 1 ? "animate-fade-in-up" : ""
                     }`}
+                    style={{
+                      animationDuration: "300ms",
+                      animationFillMode: "backwards",
+                    }}
                   >
                     {message.role === "assistant" && (
-                      <div className="mr-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-500 rounded-lg shadow-lg flex items-center justify-center">
-                          <Volume2 className="w-5 h-5 text-white" />
-                        </div>
-                      </div>
+                      <Avatar className="w-8 h-8 mr-2 border">
+                        <AvatarImage
+                          src="/ant-logo.svg"
+                          alt="AI Assistant Avatar"
+                        />
+                        <AvatarFallback>AI</AvatarFallback>
+                      </Avatar>
                     )}
                     <div
-                      className={`relative p-4 rounded-xl text-sm max-w-[70%] shadow-md transition-all hover:shadow-lg ${
+                      className={`p-3 rounded-md text-sm max-w-[65%] ${
                         message.role === "user"
-                          ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white"
-                          : "bg-white dark:bg-gray-800 border border-orange-200 dark:border-orange-900"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted border"
                       }`}
                     >
                       <MessageContent
@@ -745,12 +722,9 @@ function ChatArea() {
       </CardContent>
 
       <CardFooter className="p-4 pt-0">
-        <div className="listening-progress mb-3">
-          <div className="listening-progress-bar" style={{ width: `${(messages.length / 20) * 100}%` }} />
-        </div>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col w-full relative bg-gradient-to-r from-orange-50 to-amber-50 dark:from-gray-800 dark:to-gray-700 border-2 border-orange-300 dark:border-orange-800 rounded-xl focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2 shadow-lg"
+          className="flex flex-col w-full relative bg-background border rounded-xl focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
         >
           <Textarea
             value={input}
@@ -758,35 +732,31 @@ function ChatArea() {
             onKeyDown={handleKeyDown}
             placeholder="Type your message here..."
             disabled={isLoading}
-            className="resize-none min-h-[44px] bg-transparent border-0 p-3 rounded-xl shadow-none focus-visible:ring-0 placeholder:text-orange-400/60"
+            className="resize-none min-h-[44px] bg-background  border-0 p-3 rounded-xl shadow-none focus-visible:ring-0"
             rows={1}
           />
           <div className="flex justify-between items-center p-3">
-            <div className="flex items-center gap-2">
-              <div className="premium-badge">
-                <Sparkles className="w-3 h-3" />
-                Plus
-              </div>
-              <span className="text-xs text-muted-foreground flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                {messages.length * 2} min listened
-              </span>
+            <div>
+              <Image
+                src="/claude-icon.svg"
+                alt="Claude Icon"
+                width={0}
+                height={14}
+                className="w-auto h-[14px] mt-1"
+              />
             </div>
             <Button
               type="submit"
               disabled={isLoading || input.trim() === ""}
-              className="audible-btn gap-2 relative overflow-hidden"
+              className="gap-2"
               size="sm"
             >
               {isLoading ? (
-                <>
-                  <Volume2 className="h-4 w-4 animate-pulse" />
-                  Narrating...
-                </>
+                <div className="animate-spin h-5 w-5 border-t-2 border-white rounded-full" />
               ) : (
                 <>
-                  <PlayCircle className="h-4 w-4" />
-                  Ask AI Narrator
+                  Send Message
+                  <Send className="h-4 w-4" />
                 </>
               )}
             </Button>
