@@ -14,6 +14,11 @@ import {
   BookOpenText,
   ChevronDown,
   Send,
+  Zap,
+  Gauge,
+  Crown,
+  Star,
+  Info,
 } from "lucide-react";
 import "highlight.js/styles/atom-one-dark.css";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -194,6 +199,37 @@ const MessageContent = ({
 type Model = {
   id: string;
   name: string;
+  description?: string;
+  speed?: "fast" | "moderate" | "slow";
+  capability?: "standard" | "advanced" | "premium";
+};
+
+// Helper function to get speed icon
+const getSpeedIcon = (speed?: Model["speed"]) => {
+  switch (speed) {
+    case "fast":
+      return <Zap className="w-3 h-3 text-green-500" />;
+    case "moderate":
+      return <Gauge className="w-3 h-3 text-yellow-500" />;
+    case "slow":
+      return <Gauge className="w-3 h-3 text-red-500" />;
+    default:
+      return null;
+  }
+};
+
+// Helper function to get capability icon
+const getCapabilityIcon = (capability?: Model["capability"]) => {
+  switch (capability) {
+    case "premium":
+      return <Crown className="w-3 h-3 text-purple-500" />;
+    case "advanced":
+      return <Star className="w-3 h-3 text-blue-500" />;
+    case "standard":
+      return <Info className="w-3 h-3 text-gray-500" />;
+    default:
+      return null;
+  }
 };
 
 interface Message {
@@ -242,19 +278,43 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
           <Button
             variant="outline"
             size="sm"
-            className="flex-grow text-muted-foreground sm:flex-grow-0"
+            className="flex-grow text-muted-foreground sm:flex-grow-0 min-w-[200px]"
+            title="Click to select a different model"
           >
-            {models.find((m) => m.id === selectedModel)?.name}
-            <ChevronDown className="ml-2 h-4 w-4" />
+            <span className="flex items-center gap-2">
+              {models.find((m) => m.id === selectedModel)?.name}
+              {(() => {
+                const model = models.find((m) => m.id === selectedModel);
+                return (
+                  <>
+                    {getSpeedIcon(model?.speed)}
+                    {getCapabilityIcon(model?.capability)}
+                  </>
+                );
+              })()}
+            </span>
+            <ChevronDown className="ml-auto h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="w-80">
           {models.map((model) => (
             <DropdownMenuItem
               key={model.id}
               onSelect={() => setSelectedModel(model.id)}
+              className="flex flex-col items-start p-3 hover:bg-accent cursor-pointer"
             >
-              {model.name}
+              <div className="flex items-center justify-between w-full mb-1">
+                <span className="font-medium">{model.name}</span>
+                <div className="flex items-center gap-2">
+                  {getSpeedIcon(model.speed)}
+                  {getCapabilityIcon(model.capability)}
+                </div>
+              </div>
+              {model.description && (
+                <span className="text-xs text-muted-foreground">
+                  {model.description}
+                </span>
+              )}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
@@ -268,19 +328,49 @@ function ChatArea() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showHeader, setShowHeader] = useState(false);
-  const [selectedModel, setSelectedModel] = useState("claude-3-5-sonnet-20240620");
+  const [selectedModel, setSelectedModel] = useState(() => {
+    // Try to load the selected model from localStorage
+    if (typeof window !== 'undefined') {
+      const savedModel = localStorage.getItem('selectedModel');
+      // Validate that the saved model exists in our models array
+      if (savedModel && models.some(m => m.id === savedModel)) {
+        return savedModel;
+      }
+    }
+    // Default to Claude 3.5 Sonnet
+    return "claude-3-5-sonnet-20241022";
+  });
   const [showAvatar, setShowAvatar] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const models: Model[] = [
-    { id: "claude-3-haiku-20240307", name: "Claude 3 Haiku" },
-    { id: "claude-3-5-sonnet-20240620", name: "Claude 3.5 Sonnet" },
+    {
+      id: "claude-3-5-haiku-20241022",
+      name: "Claude 3.5 Haiku",
+      description: "Fast responses, ideal for quick queries",
+      speed: "fast",
+      capability: "standard"
+    },
+    {
+      id: "claude-3-5-sonnet-20241022",
+      name: "Claude 3.5 Sonnet",
+      description: "Balanced performance, best for most tasks",
+      speed: "moderate",
+      capability: "advanced"
+    },
   ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  // Persist model selection to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedModel', selectedModel);
+    }
+  }, [selectedModel]);
 
   useEffect(() => {
     console.log("🔍 Messages changed! Count:", messages.length);
