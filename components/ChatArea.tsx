@@ -323,6 +323,24 @@ const ConversationHeader: React.FC<ConversationHeaderProps> = ({
   </div>
 );
 
+// Define available models outside the component
+const models: Model[] = [
+  {
+    id: "claude-3-5-haiku-20241022",
+    name: "Claude 3.5 Haiku",
+    description: "Fast responses, ideal for quick queries",
+    speed: "fast",
+    capability: "standard"
+  },
+  {
+    id: "claude-3-5-sonnet-20241022",
+    name: "Claude 3.5 Sonnet",
+    description: "Balanced performance, best for most tasks",
+    speed: "moderate",
+    capability: "advanced"
+  },
+];
+
 function ChatArea() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -343,23 +361,6 @@ function ChatArea() {
   const [showAvatar, setShowAvatar] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const models: Model[] = [
-    {
-      id: "claude-3-5-haiku-20241022",
-      name: "Claude 3.5 Haiku",
-      description: "Fast responses, ideal for quick queries",
-      speed: "fast",
-      capability: "standard"
-    },
-    {
-      id: "claude-3-5-sonnet-20241022",
-      name: "Claude 3.5 Sonnet",
-      description: "Balanced performance, best for most tasks",
-      speed: "moderate",
-      capability: "advanced"
-    },
-  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
