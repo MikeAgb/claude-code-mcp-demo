@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { Moon, Sun, Check, Headphones, BookOpen, Volume2 } from "lucide-react";
+import { Moon, Sun, Check } from "lucide-react";
 import { useTheme } from "next-themes";
 import { themes } from "@/styles/themes";
 import {
@@ -86,26 +86,16 @@ const TopNavBar = () => {
   }
 
   return (
-    <nav className="text-foreground p-4 flex justify-between items-center bg-gradient-to-r from-orange-50 to-amber-50 dark:from-gray-900 dark:to-gray-800 border-b-2 border-orange-200 dark:border-orange-900">
-      <div className="font-bold text-xl flex gap-3 items-center">
-        <div className="flex items-center gap-2">
-          <div className="p-2 bg-gradient-to-br from-orange-500 to-amber-500 rounded-lg shadow-lg">
-            <Headphones className="h-6 w-6 text-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">Audible AI</span>
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <Volume2 className="h-3 w-3" />
-              Audiobook Assistant
-            </span>
-          </div>
-        </div>
+    <nav className="text-foreground p-4 flex justify-between items-center">
+      <div className="font-bold text-xl flex gap-2 items-center">
+        <Image
+          src={theme === "dark" ? "/wordmark-dark.svg" : "/wordmark.svg"}
+          alt="Company Wordmark"
+          width={112}
+          height={20}
+        />
       </div>
       <div className="flex items-center gap-2">
-        <div className="hidden md:flex items-center gap-2 mr-4 px-3 py-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full text-sm font-semibold">
-          <BookOpen className="h-4 w-4" />
-          <span>Premium Experience</span>
-        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">

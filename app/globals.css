@@ -4,58 +4,64 @@
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 3.9%;
+        /* Audible Brand Colors */
+        --audible-orange: 31 100% 50%;
+        --audible-dark: 0 0% 13%;
+        --audible-gold: 36 100% 50%;
+        --audible-warm-gray: 0 0% 97%;
+
+        --background: 0 0% 98%;
+        --foreground: 0 0% 13%;
         --card: 0 0% 100%;
-        --card-foreground: 0 0% 3.9%;
+        --card-foreground: 0 0% 13%;
         --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 3.9%;
-        --primary: 0 0% 9%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 0 0% 96.1%;
-        --secondary-foreground: 0 0% 9%;
-        --muted: 0 0% 96.1%;
-        --muted-foreground: 0 0% 45.1%;
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
+        --popover-foreground: 0 0% 13%;
+        --primary: 31 100% 50%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 36 100% 95%;
+        --secondary-foreground: 0 0% 13%;
+        --muted: 0 0% 96%;
+        --muted-foreground: 0 0% 45%;
+        --accent: 31 100% 95%;
+        --accent-foreground: 31 100% 40%;
         --destructive: 0 84.2% 60.2%;
         --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 89.8%;
-        --input: 0 0% 89.8%;
-        --ring: 0 0% 3.9%;
-        --radius: 0.75rem;
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
+        --border: 31 30% 90%;
+        --input: 0 0% 95%;
+        --ring: 31 100% 50%;
+        --radius: 0.5rem;
+        --chart-1: 31 100% 50%;
+        --chart-2: 36 100% 50%;
+        --chart-3: 25 95% 53%;
+        --chart-4: 31 100% 45%;
+        --chart-5: 36 95% 55%;
     }
 
     .dark {
-        --background: 0 0% 3.9%;
+        --background: 0 0% 8%;
         --foreground: 0 0% 98%;
-        --card: 0 0% 3.9%;
+        --card: 0 0% 13%;
         --card-foreground: 0 0% 98%;
-        --popover: 0 0% 3.9%;
+        --popover: 0 0% 13%;
         --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
-        --secondary: 0 0% 14.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 14.9%;
-        --muted-foreground: 0 0% 63.9%;
-        --accent: 0 0% 14.9%;
-        --accent-foreground: 0 0% 98%;
+        --primary: 31 100% 50%;
+        --primary-foreground: 0 0% 13%;
+        --secondary: 0 0% 18%;
+        --secondary-foreground: 31 100% 60%;
+        --muted: 0 0% 20%;
+        --muted-foreground: 0 0% 70%;
+        --accent: 31 100% 20%;
+        --accent-foreground: 31 100% 60%;
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 14.9%;
-        --input: 0 0% 14.9%;
-        --ring: 0 0% 83.1%;
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
+        --border: 0 0% 25%;
+        --input: 0 0% 18%;
+        --ring: 31 100% 50%;
+        --chart-1: 31 100% 50%;
+        --chart-2: 36 100% 50%;
+        --chart-3: 25 95% 53%;
+        --chart-4: 31 100% 45%;
+        --chart-5: 36 95% 55%;
     }
 }
 
@@ -65,5 +71,172 @@
     }
     body {
         @apply bg-background text-foreground;
+        font-family: 'Amazon Ember', system-ui, -apple-system, sans-serif;
     }
+}
+
+/* Audible-inspired animations and effects */
+@keyframes audioWave {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1); }
+}
+
+@keyframes pulse-orange {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 146, 0, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(255, 146, 0, 0.5); }
+}
+
+/* Audio waveform bars */
+.audio-wave {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    height: 30px;
+}
+
+.audio-wave span {
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to top, hsl(31, 100%, 50%), hsl(36, 100%, 50%));
+    border-radius: 3px;
+    animation: audioWave 1s ease-in-out infinite;
+}
+
+.audio-wave span:nth-child(2) { animation-delay: 0.1s; }
+.audio-wave span:nth-child(3) { animation-delay: 0.2s; }
+.audio-wave span:nth-child(4) { animation-delay: 0.3s; }
+.audio-wave span:nth-child(5) { animation-delay: 0.4s; }
+
+/* Message animations */
+.message-appear {
+    animation: slide-up 0.3s ease-out;
+}
+
+/* Audible button styles */
+.audible-btn {
+    background: linear-gradient(135deg, hsl(31, 100%, 50%), hsl(36, 100%, 50%));
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.audible-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255, 146, 0, 0.3);
+}
+
+.audible-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.audible-btn:hover::before {
+    left: 100%;
+}
+
+/* Chapter markers */
+.chapter-marker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(90deg, hsl(31, 100%, 95%), transparent);
+    border-left: 3px solid hsl(31, 100%, 50%);
+    margin: 16px 0;
+    font-weight: 600;
+    color: hsl(31, 100%, 40%);
+}
+
+/* Audiobook card styling */
+.audiobook-card {
+    background: linear-gradient(135deg, rgba(255, 146, 0, 0.05), rgba(255, 193, 0, 0.05));
+    border: 1px solid hsl(31, 100%, 90%);
+    transition: all 0.3s ease;
+}
+
+.audiobook-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(255, 146, 0, 0.15);
+}
+
+/* Progress bar */
+.listening-progress {
+    height: 4px;
+    background: hsl(0, 0%, 90%);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.listening-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, hsl(31, 100%, 50%), hsl(36, 100%, 50%));
+    transition: width 0.3s ease;
+}
+
+/* Premium badge */
+.premium-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, hsl(31, 100%, 50%), hsl(36, 100%, 50%));
+    color: white;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: hsl(0, 0%, 95%);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, hsl(31, 100%, 50%), hsl(36, 100%, 50%));
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: hsl(31, 100%, 45%);
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+    background: hsl(0, 0%, 20%);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, hsl(31, 100%, 50%), hsl(36, 100%, 45%));
 }
